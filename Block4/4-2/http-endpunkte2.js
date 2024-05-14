@@ -47,6 +47,50 @@ app.get('/name', (request, response) => {
   response.send(list);
 });
 
+//delete name
+app.delete('/names', (request, response) => {
+  const nameOfDelete = request.query.name;
+  const NameIndex = list.indexOf(nameOfDelete);
+  if (NameIndex > -1) {
+    list.splice(NameIndex, 1);
+    response.send('Name deleted');
+  } else {
+    response.send('Name not found');
+  }
+  respond.send(list);
+});
+
+//schwierigkeiten gehabt
+app.get('/secret2', (request, response) => {
+  const authHeader = request.headers.authorization;
+  if (authHeader === 'Basic aGFja2VyOjEyMzQ=') {
+    response.sendStatus(200);
+  } else {
+    response.sendStatus(401);
+  }
+});
+
+app.get('/chuck', (request, response) => {
+  const name = request.query.name || 'Chuck Norris';
+  fetch(`https://api.chucknorris.io/jokes/random?name=${name}`)
+    .then(res => res.json())
+    .then(data => {
+      const joke = data.value.replace('Chuck Norris', name);
+      response.send(joke);
+    })
+    .catch(error => {
+      console.error(error);
+      response.sendStatus(500);
+    });
+});
+
+app.patch('/me', (request, response) => {
+  const updatedData = request.body;
+  Object.assign(me, updatedData);
+  response.send('Data updated');
+});
+
+
 app.listen(port, () => {
   console.log(`Beispiel-App hört auf Port ${port}`);
 });
