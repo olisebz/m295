@@ -12,9 +12,16 @@ let books = [
     {"isbn": "978-3-456-78902-3", "title": "Krieg und Frieden", "author": "Leo Tolstoy", "year": 1869}
 ];
 
-let lends = [];
+let lends = [{
+  "isbn": "978-3-123-45678-9", "customer_id": "123456"
+}
+];
 
 app.use(express.json());
+
+app.get('/books', (request, response) => {
+  response.json(books);
+});
 
 app.get('/lends', (request, response) => {
     response.json(lends);
