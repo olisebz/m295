@@ -1,25 +1,26 @@
 const express = require('express');
-
 const app = express();
+const port = 3000;
 
-app.use(express.json());
-
-app.get('/public', (req, res) => {
-  res.send('This is a public endpoint');
+app.get('/public', (request, response) => {
+  response.send('Public endpoint');
 });
 
-// Private endpoint
-app.get('/private', (req, res) => {
-  const { username, password } = req.headers;
-
-  if (username === 'zli' && password === 'zli1234') {
-    res.send('This is a private endpoint');
+app.get('/private', (request, response) => {
+  if (!request.headers.authorization) {
+    response.status(401).header({
+      "WWW-Authenticate": 'Basic realm="Authenticate yourself!"'
+    }).send();
   } else {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');
-    res.status(401).send('Unauthorized');
+    const credentials = atob(request.headers.authorization.replace("Basic ", "")).split(":");
+    if (credentials[0] === "zli" && credentials[1] === "zli1234") {
+      response.send("Private endpoint");
+    } else {
+      response.send(401);
+    }
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(port, () => {
+  console.log(`Auth app listening on port ${port}`);
 });
