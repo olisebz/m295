@@ -1,3 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-tabs */
+/* eslint-disable consistent-return */
+/* eslint-disable radix */
+/* eslint-disable no-shadow */
+/* eslint-disable eqeqeq */
 const express = require('express');
 const swaggerAutogen = require('swagger-autogen');
 const swaggerUi = require('swagger-ui-express');
@@ -11,14 +18,14 @@ const port = 3000;
 app.use(express.json());
 app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-let homeworks = [
-  {id: 1, name: "Einkaufen", done: false},
-  {id: 2, name: "Putzen", done: true},
-  {id: 3, name: "Lernen", done: false}
+const homeworks = [
+  { id: 1, name: 'Einkaufen', done: false },
+  { id: 2, name: 'Putzen', done: true },
+  { id: 3, name: 'Lernen', done: false },
 ];
 
 function isValidHomework(homework) {
-  return homework.name != "" && typeof homework.done == "boolean";
+  return homework.name != '' && typeof homework.done === 'boolean';
 }
 
 function getNextId() {
@@ -30,36 +37,36 @@ app.get('/homeworks', (request, response) => {
 });
 
 app.post('/homeworks', (request, response) => {
-  const newHomework = request.body
-	if (isValidHomework(newHomework)) {
+  const newHomework = request.body;
+  if (isValidHomework(newHomework)) {
     newHomework.id = getNextId();
-		homeworks.push(newHomework);
-		response.json(newHomework);
-	} else {
-		response.sendStatus(422);
-	}
+    homeworks.push(newHomework);
+    response.json(newHomework);
+  } else {
+    response.sendStatus(422);
+  }
 });
 
 app.get('/homeworks/:id', (request, response) => {
   const id = parseInt(request.params.id);
   const index = homeworks.findIndex((homework) => homework.id === id);
   if (index < 0) {
-		return response.sendStatus(404);
-	}
+    return response.sendStatus(404);
+  }
   response.json(homeworks[index]);
 });
 
-app.put("/homeworks/:id", (request, response) => {
-	const id = parseInt(request.params.id);
-	const index = homeworks.findIndex((homework) => homework.id === id);
-	const updatedHomework = request.body;
-	if (index < 0) {
-		return response.sendStatus(404);
-	} else if (isValidHomework(updatedHomework)) {
+app.put('/homeworks/:id', (request, response) => {
+  const id = parseInt(request.params.id);
+  const index = homeworks.findIndex((homework) => homework.id === id);
+  const updatedHomework = request.body;
+  if (index < 0) {
+    return response.sendStatus(404);
+  } if (isValidHomework(updatedHomework)) {
     updatedHomework.id = id;
-		homeworks[index] = updatedHomework;
+    homeworks[index] = updatedHomework;
 	  response.status(200).json(updatedHomework);
-	} else {
+  } else {
     return response.sendStatus(422);
   }
 });
@@ -68,8 +75,8 @@ app.delete('/homeworks/:id', (request, response) => {
   const id = parseInt(request.params.id);
   const index = homeworks.findIndex((homework) => homework.id === id);
   if (index < 0) {
-		return response.sendStatus(404);
-	}
+    return response.sendStatus(404);
+  }
   const deletedHomework = homeworks[index];
   homeworks.splice(index, 1);
   response.json(deletedHomework);
@@ -82,9 +89,9 @@ app.listen(port, () => {
 const doc = {
   info: {
     title: 'Homeworks API',
-    description: 'My Homework API'
+    description: 'My Homework API',
   },
-  host: 'localhost:3000'
+  host: 'localhost:3000',
 };
 const outputFile = './swagger-output.json';
 const routes = ['./homework.js'];

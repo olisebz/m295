@@ -6,7 +6,7 @@ const app = express();
 app.use(session({
   secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
 }));
 
 app.post('/name', (req, res) => {
@@ -16,7 +16,7 @@ app.post('/name', (req, res) => {
 });
 
 app.get('/name', (req, res) => {
-  const name = req.session.name;
+  const { name } = req.session;
   res.send(name);
 });
 
